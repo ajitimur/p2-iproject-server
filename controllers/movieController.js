@@ -51,6 +51,54 @@ class MovieController {
     next(error)
    }
  }
+
+ static async findById(req, res, next){
+   const url = `https://api.themoviedb.org/3/movie/`
+   const MovieId = req.params.MovieId
+   const key = process.env.FIND_KEY
+   try {
+     const result = await axios({
+       method: `GET`,
+       url: `${url}/${MovieId}?api_key=${key}`
+      })
+      const movie = result.data
+      const searchQuery = movie.original_title.split(` `).join(`%20`)
+
+      // console.log(movieTitle);
+
+      const videoId = await axios({
+        method: `GET`,
+        url: `https://youtube-advanced-search.p.rapidapi.com/video/${searchQuery}`,
+        headers: {
+          'x-rapidapi-host': `youtube-advanced-search.p.rapidapi.com`,
+          'x-rapidapi-key': process.env.VIDEOID_KEY
+        }
+      })
+      
+      const videoIdQuery = videoId.data.Data[0].video_id
+      // console.log(videoIdQuery);
+
+      const trailer = await axios({
+        method: `GET`,
+        url: `https://simple-youtube-search.p.rapidapi.com/video`,
+        params: {
+          search: `https://www.youtube.com/watch?v=${videoIdQuery}`
+        },
+        headers: {
+          'x-rapidapi-host': 'simple-youtube-search.p.rapidapi.com',
+          'x-rapidapi-key': process.env.TRAILER_KEY
+        }
+      })
+
+      const trailerLink = trailer.data.result.url
+      movie.trailerLink = trailerLink
+      // console.log(trailer.data.result.url);
+
+     res.status(200).json(movie)
+   } catch (error) {
+     next(error)
+   }
+ }
 }
 
 
