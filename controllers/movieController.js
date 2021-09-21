@@ -29,16 +29,16 @@ class MovieController {
 
  static async searchMovie(req, res, next){
    const url = process.env.tmdb_SEARCH_URL;
-   const { page:paramPage, title } = req.query;
+   const { page:paramPage, query } = req.query;
    const page = paramPage ? paramPage : 1;
    try {
-    const result = await axios({
-      method: `GET`,
-      url: `${url}?query=${title}&page=${page}`
-    })
-    // console.log(result.data);
+     const result = await axios({
+       method: `GET`,
+       url: `${url}&query=${query}&page=${page}`
+      })
+      // console.log(result.data);
     
-     if(!result.data){
+     if(!result){
       throw{
         name: `NOTFOUND`,
         code: 404,
