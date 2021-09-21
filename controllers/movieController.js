@@ -32,11 +32,11 @@ class MovieController {
    const { page:paramPage, query } = req.query;
    const page = paramPage ? paramPage : 1;
    try {
+    //  console.log(`haloo`);
      const result = await axios({
        method: `GET`,
        url: `${url}&query=${query}&page=${page}`
       })
-      // console.log(result.data);
     
      if(!result){
       throw{

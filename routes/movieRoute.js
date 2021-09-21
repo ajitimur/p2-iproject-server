@@ -4,7 +4,7 @@ const movieRoute = express.Router()
 
 
 movieRoute.get(`/`, MovieController.getPopular)
-movieRoute.get(`/:MovieId`, MovieController.findById)
 movieRoute.get(`/search`, MovieController.searchMovie)
+movieRoute.get(`/:MovieId`, MovieController.findById)
 
 module.exports = movieRoute
