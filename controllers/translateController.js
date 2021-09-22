@@ -9,10 +9,10 @@ class TranslateController{
     try {
       const result = await axios({
         method: `POST`,
-        url: `https://google-translate20.p.rapidapi.com/translate`,
+        url: `${process.env.TRANSLATE_URL}`,
         headers: {
           'x-rapidapi-host': host,
-          'x-rapidapi-key': process.env.TRANSLATE_KEY
+          'x-rapidapi-key': process.env.RAPID_API_KEY
         },
         data: {
           text,
