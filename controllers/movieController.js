@@ -53,7 +53,7 @@ class MovieController {
  }
 
  static async findById(req, res, next){
-   const url = `https://api.themoviedb.org/3/movie/`
+   const url = process.env.TMDB_SEARCH_ID
    const MovieId = req.params.MovieId
    const key = process.env.FIND_KEY
    try {
@@ -64,36 +64,21 @@ class MovieController {
       const movie = result.data
       const searchQuery = movie.original_title.split(` `).join(`%20`)
 
-      // console.log(movieTitle);
+     
 
       const videoId = await axios({
         method: `GET`,
         url: `https://youtube-advanced-search.p.rapidapi.com/video/${searchQuery}`,
         headers: {
           'x-rapidapi-host': `youtube-advanced-search.p.rapidapi.com`,
-          'x-rapidapi-key': process.env.VIDEOID_KEY
+          'x-rapidapi-key': process.env.RAPID_API_KEY
         }
       })
       
       const videoIdQuery = videoId.data.Data[0].video_id
-      // console.log(videoIdQuery);
-
-      const trailer = await axios({
-        method: `GET`,
-        url: `https://simple-youtube-search.p.rapidapi.com/video`,
-        params: {
-          search: `https://www.youtube.com/watch?v=${videoIdQuery}`
-        },
-        headers: {
-          'x-rapidapi-host': 'simple-youtube-search.p.rapidapi.com',
-          'x-rapidapi-key': process.env.TRAILER_KEY
-        }
-      })
-
-      const trailerLink = trailer.data.result.url
-      movie.trailerLink = trailerLink
-      // console.log(trailer.data.result.url);
-
+      
+      movie.trailerLink = `https://www.youtube.com/embed/${videoIdQuery}`
+     
      res.status(200).json(movie)
    } catch (error) {
      next(error)

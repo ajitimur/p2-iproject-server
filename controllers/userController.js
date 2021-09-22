@@ -1,6 +1,9 @@
 const { User, Review } = require(`../models`)
 const { decode } = require(`../helpers/bcrypt.js`)
 const { signIn } = require(`../helpers/jwt.js`)
+const {OAuth2Client} = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENTID);
+
 
 
 class UserController {
@@ -49,6 +52,47 @@ class UserController {
             message: `Email / Password is wrong`
         }  
     }
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async googleLogin(req, res, next){
+    try {
+      let idToken = req.body.idToken
+      const ticket = await client.verifyIdToken({
+        idToken,
+        audience: process.env.GOOGLE_CLIENTID, 
+      });
+      // console.log(ticket);
+      const payload = ticket.getPayload()
+      // console.log(payload, `=============`);
+      // res.status(200).json(payload)
+      let { email } = payload
+      let username = payload.given_name + payload.family_name
+      let password = payload.at_hash
+      
+    
+      let user = await User.findOrCreate({
+        where: {
+          email
+        },
+        defaults: {
+          username,
+          password,
+        }
+      })
+
+      
+      const access_token = signIn({
+        id: user[0].dataValues.id,
+        username: user[0].dataValues.username,
+        email: user[0].dataValues.email,
+        
+    });
+    // console.log(accessToken);
+    res.status(200).json({access_token})
+      
     } catch (error) {
       next(error)
     }

@@ -6,6 +6,7 @@ class ReviewController {
     const MovieId = req.params.MovieId
     const UserId = req.user.id;
     const { title, content, rating } = req.body
+    
     try {
       const result = await Review.create({ title, content, rating, MovieId, UserId })
       res.status(201).json(result)
@@ -17,7 +18,7 @@ class ReviewController {
   static async getReview(req, res, next){
     const MovieId = req.params.MovieId
     try {
-      const result = await Review.findAll({where: {MovieId}})
+      const result = await Review.findAll({where: {MovieId}, include: [{model: User}], order: [[`updatedAt`, `DESC`]]})
       res.status(200).json(result)
     } catch (error) {
       next(error)
