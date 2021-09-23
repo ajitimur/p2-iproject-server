@@ -305,3 +305,81 @@ _Response (200)_
     "createdAt": "2021-09-23T02:25:35.373Z"
 }
 ```
+
+### GET /reviews/review/:ReviewId
+> GET one review
+_Request Header_
+```
+{
+  "access_token": "<your access token>"
+}
+```
+_Request Body_
+```
+not needed
+```
+_Response (200)_
+```
+{
+    "id": 17,
+    "title": "test",
+    "content": "test",
+    "rating": 5,
+    "MovieId": 848278,
+    "UserId": 1,
+    "updatedAt": "2021-09-23T02:25:35.373Z",
+    "createdAt": "2021-09-23T02:25:35.373Z"
+}
+```
+
+
+### PUT /reviews/review/:ReviewId
+> Edit review
+_Request Header_
+```
+{
+  "access_token": "<your access token>"
+}
+```
+_Request Body_
+```
+{
+  title: <review title>,
+  content: <review content>,
+  rating: <review rating in integer>
+}
+```
+_Response (200)_
+```
+{
+    "id": 17,
+    "title": "test",
+    "content": "test",
+    "rating": 5,
+    "MovieId": 848278,
+    "UserId": 1,
+    "updatedAt": "2021-09-23T02:25:35.373Z",
+    "createdAt": "2021-09-23T02:25:35.373Z"
+}
+```
+
+### DELETE /reviews/review/:ReviewId
+> Delete review
+_Request Header_
+```
+{
+  "access_token": "<your access token>"
+}
+```
+_Request Body_
+```
+{
+  not needed
+}
+```
+_Response (200)_
+```
+{
+    message: `Post has been deleted`
+}
+```
