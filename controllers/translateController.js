@@ -2,9 +2,8 @@ const axios = require(`axios`)
 
 class TranslateController{
   static async translate(req, res, next){
-    const { text } = req.body
-    const tl = `id`
-    const sl = `en`
+    const { text, tl, sl } = req.body
+    // console.log(req.body, `<<<<<<<<<`);
     const host = `google-translate20.p.rapidapi.com`
     try {
       const result = await axios({
